@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Itinéraire Voile Croatie : Trogir - Dubrovnik</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Leaflet CSS pour la carte interactive -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: #004266;
+            color: white;
+            padding: 20px 10px;
+            text-align: center;
+        }
+
+        section {
+            padding: 2em 5vw;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 2em 0;
+        }
+
+        th,
+        td {
+            border: 1px solid #cce;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background: #e8f3fc;
+        }
+
+        #map {
+            height: 500px;
+            margin: 2em 0;
+        }
+
+        ul {
+            margin-top: 0.2em;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Itinéraire Voile de Trogir à Dubrovnik</h1>
+        <h2>Du 2 août au 15 août – Dufour 46 – 7 personnes</h2>
+    </header>
+
+    <section>
+        <h3>Détails de l'itinéraire</h3>
+        <ul>
+            <li>Départ : Trogir, samedi 2 août à 18h00</li>
+            <li>Retour : Trogir, vendredi 15 août à 18h00</li>
+            <li>Bateau : Dufour 46 – 7 personnes</li>
+            <li>Vitesse moyenne : 6 nœuds</li>
+            <li>Durée moyenne de navigation : 3h/jour</li>
+            <li>Ravitaillement tous les 4 jours en port</li>
+            <li>Pas d’arrêt à Split</li>
+        </ul>
+
+        <table>
+            <caption><strong>Calendrier Jour par Jour</strong></caption>
+            <tr>
+                <th>Date</th>
+                <th>Étape (distance)</th>
+                <th>Mouillage / Port</th>
+                <th>Services & Points d’intérêt</th>
+                <th>Observations</th>
+            </tr>
+            <tr>
+                <td>Sa 02/08</td>
+                <td>Trogir → Maslinica (7 nm)</td>
+                <td>Maslinica, Šolta</td>
+                <td>Tavernes, eau le matin</td>
+                <td>Prise en main, coucher de soleil</td>
+            </tr>
+            <tr>
+                <td>Di 03/08</td>
+                <td>Maslinica → Stari Grad (21 nm)</td>
+                <td>Stari Grad (ravitaillement)</td>
+                <td>Vieille ville UNESCO</td>
+                <td>Arrivée tôt pour les places</td>
+            </tr>
+            <tr>
+                <td>Lu 04/08</td>
+                <td>Stari Grad → Palmižana (10 nm)</td>
+                <td>ACI Palmižana</td>
+                <td>Pinède, navette Hvar</td>
+                <td>Réserver marina</td>
+            </tr>
+            <tr>
+                <td>Ma 05/08</td>
+                <td>Palmižana → Vela Luka (19 nm)</td>
+                <td>Quai Vela Luka</td>
+                <td>Restaurants, grotte</td>
+                <td>Départ tôt conseillé</td>
+            </tr>
+            <tr>
+                <td>Me 06/08</td>
+                <td>Vela Luka → Polače (31 nm)</td>
+                <td>Baie Polače, Mljet</td>
+                <td>Parc national, lacs salés</td>
+                <td>Abri sûr, droits PN</td>
+            </tr>
+            <tr>
+                <td>Je 07/08</td>
+                <td>Polače → Okuklje (10 nm)</td>
+                <td>Okuklje, SE Mljet</td>
+                <td>Restaurant, eau potable</td>
+                <td>Sérénité, baie abritée</td>
+            </tr>
+            <tr>
+                <td>Ve 08/08</td>
+                <td>Okuklje → Šipanska Luka (8 nm)</td>
+                <td>Šipan</td>
+                <td>Oliveraies, restos</td>
+                <td>Baignades, détente</td>
+            </tr>
+            <tr>
+                <td>Sa 09/08</td>
+                <td>Šipan → ACI Dubrovnik (15 nm)</td>
+                <td>ACI Dubrovnik (ravitaillement)</td>
+                <td>Vieille ville, bus</td>
+                <td>Visite Dubrovnik, réservation</td>
+            </tr>
+            <tr>
+                <td>Di 10/08</td>
+                <td>Dubrovnik → Slano (12 nm)</td>
+                <td>Slano, marina/mouillage</td>
+                <td>Supermarché, caves à vin</td>
+                <td>Départ matinal conseillé</td>
+            </tr>
+            <tr>
+                <td>Lu 11/08</td>
+                <td>Slano → Žuljana (20 nm)</td>
+                <td>Baie de Žuljana, Pelješac</td>
+                <td>Plage, plongée</td>
+                <td>Abri, fond sable</td>
+            </tr>
+            <tr>
+                <td>Ma 12/08</td>
+                <td>Žuljana → Korčula (15 nm)</td>
+                <td>Korčula (ravitaillement)</td>
+                <td>Vieille ville, Marco Polo</td>
+                <td>Arriver avant 15h</td>
+            </tr>
+            <tr>
+                <td>Me 13/08</td>
+                <td>Korčula → Lovište (10 nm)</td>
+                <td>Baie Lovište, Pelješac</td>
+                <td>Mouillages sauvages</td>
+                <td>Abri tous vents</td>
+            </tr>
+            <tr>
+                <td>Je 14/08</td>
+                <td>Lovište → Milna (29 nm)</td>
+                <td>Marina Milna (ravitaillement)</td>
+                <td>Supermarchés, charcuterie</td>
+                <td>Traversée tôt</td>
+            </tr>
+            <tr>
+                <td>Ve 15/08</td>
+                <td>Milna → Blue Lagoon (14 nm) puis Trogir (7 nm)</td>
+                <td>Blue Lagoon & Trogir</td>
+                <td>Snorkeling, base retour</td>
+                <td>Contrôle & carburant avant 17h</td>
+            </tr>
+        </table>
+
+        <h3>Conseils pratiques et sécurité</h3>
+        <ul>
+            <li><strong>Thermiques :</strong> Maestral (NW) favorise navigation après-midi, partir tôt pour éviter les
+                rafales.</li>
+            <li><strong>Bora possible :</strong> Surveillez les bulletins météo, privilégiez ports fermés/abris sûrs si
+                besoin.</li>
+            <li><strong>Ravitaillement :</strong> Amener des jerricans pour l’eau, prévoir réserves depuis les ports.
+            </li>
+            <li><strong>Réservations :</strong> ACI Marinas Dubrovnik et Palmižana à réserver en avance
+                (applications/phone).</li>
+            <li><strong>Respect de l’environnement :</strong> Voile > 50% du temps, tri des déchets en marina, pas de
+                mouillage sur la posidonie.</li>
+            <li><strong>Avant le départ :</strong> Vérifiez documents (VHF, licences…), cash pour mooring, appli météo
+                chargée.</li>
+        </ul>
+
+        <h3>Distances et navigation</h3>
+        <ul>
+            <li><strong>Distance totale :</strong> ~300 MN (nautical miles)</li>
+            <li><strong>Temps de navigation estimé :</strong> ~42h sur 14 jours (~3h/jour)</li>
+            <li><strong>Étapes ravitaillement principales :</strong> Stari Grad, ACI Dubrovnik, Korčula, Milna</li>
+        </ul>
+
+        <h3>Carte interactive de l’itinéraire</h3>
+        <div id="map"></div>
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        <script>
+            // Coordonnées principales des étapes
+            const waypoints = [
+                { name: "Trogir", coords: [43.5147, 16.2500] },
+                { name: "Maslinica", coords: [43.3970, 16.1919] },
+                { name: "Stari Grad", coords: [43.1836, 16.5985] },
+                { name: "Palmižana", coords: [43.1672, 16.4065] },
+                { name: "Vela Luka", coords: [42.9611, 16.7213] },
+                { name: "Polače (Mljet)", coords: [42.7958, 17.3755] },
+                { name: "Okuklje", coords: [42.7339, 17.7113] },
+                { name: "Šipanska Luka", coords: [42.7366, 17.8605] },
+                { name: "ACI Dubrovnik", coords: [42.6727, 18.1266] },
+                { name: "Slano", coords: [42.7863, 17.8877] },
+                { name: "Žuljana", coords: [42.9236, 17.4118] },
+                { name: "Korčula", coords: [42.9587, 17.1353] },
+                { name: "Lovište", coords: [43.0192, 17.0373] },
+                { name: "Milna", coords: [43.3251, 16.4478] },
+                { name: "Blue Lagoon", coords: [43.4424, 16.1592] },
+                { name: "Trogir (retour)", coords: [43.5147, 16.2500] },
+            ];
+
+            var map = L.map('map').setView([43.1, 16.9], 8);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Ajoute la ligne de l'itinéraire
+            L.polyline(waypoints.map(w => w.coords), { color: 'blue', weight: 4 }).addTo(map);
+
+            // Ajoute les marqueurs avec popup pour chaque étape
+            waypoints.forEach(wp => {
+                L.marker(wp.coords).addTo(map).bindPopup('<strong>' + wp.name + '</strong>');
+            });
+        </script>
+        <p>Zoomez et cliquez sur les marqueurs pour plus de détails sur chaque escale.</p>
+    </section>
+</body>
+
+</html>
