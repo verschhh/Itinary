@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Itinéraire de Navigation Croatie</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        #map {
+            height: 600px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+        }
+
+        .legend {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .legend h3 {
+            color: #2c3e50;
+            margin-top: 0;
+            font-size: 1.4em;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .legend-item:hover {
+            transform: translateX(10px);
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .start {
+            background: #27ae60;
+        }
+
+        .port {
+            background: #3498db;
+        }
+
+        .supply {
+            background: #e74c3c;
+        }
+
+        .end {
+            background: #f39c12;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .popup-content {
+            font-family: 'Segoe UI', sans-serif;
+            line-height: 1.6;
+        }
+
+        .popup-content h4 {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+            font-size: 1.2em;
+        }
+
+        .popup-content .day {
+            background: #3498db;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .route-line {
+            animation: dash 20s linear infinite;
+        }
+
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -100;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🛥️ Itinéraire de Navigation Croatie 2024</h1>
+        <div id="map"></div>
+
+        <div class="info-box">
+            <h3>📊 Statistiques du Voyage</h3>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value">13</div>
+                    <div>Jours de Navigation</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">~234</div>
+                    <div>Milles Nautiques</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">6</div>
+                    <div>Nœuds Moyenne</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">4</div>
+                    <div>Ports Ravitaillement</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="legend">
+            <h3>🗺️ Légende de la Carte</h3>
+            <div class="legend-item">
+                <div class="legend-color start"></div>
+                <span><strong>Point de Départ</strong> - Trogir (2 août 18h00)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color port"></div>
+                <span><strong>Escales Principales</strong> - Mouillages et ports de plaisance</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color supply"></div>
+                <span><strong>Points Ravitaillement</strong> - Hvar, Korčula, Dubrovnik, Comisa</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color end"></div>
+                <span><strong>Point d'Arrivée</strong> - Trogir (15 août 18h00)</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialiser la carte centrée sur la côte dalmate
+        const map = L.map('map').setView([43.5, 16.8], 8);
+
+        // Ajouter une couche de tuiles marine
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri &mdash; Sources: GEBCO, NOAA, CHS, OSU, UNH, CSUMB, National Geographic, DeLorme, NAVTEQ',
+            maxZoom: 13
+        }).addTo(map);
+
+        // Points de l'itinéraire avec coordonnées précises
+        const waypoints = [
+            { name: "Trogir", lat: 43.5147, lng: 16.2520, day: "Jour 1", type: "start", description: "Départ 18h00 - Base de départ" },
+            { name: "Stomorska (Šolta)", lat: 43.4089, lng: 16.2667, day: "Jour 1-2", type: "port", description: "Première escale - Baie tranquille" },
+            { name: "Hvar Ville", lat: 43.1729, lng: 16.4414, day: "Jour 2-3", type: "supply", description: "Ravitaillement - Ville historique" },
+            { name: "Vela Luka (Korčula)", lat: 42.9606, lng: 16.7217, day: "Jour 3-4", type: "port", description: "Mouillage protégé - Vignobles" },
+            { name: "Korčula Ville", lat: 42.9597, lng: 17.1356, day: "Jour 4-5", type: "supply", description: "Ravitaillement - Petite Dubrovnik" },
+            { name: "Lastovo", lat: 42.7739, lng: 16.9019, day: "Jour 5-6", type: "port", description: "Île préservée - Nature sauvage" },
+            { name: "Mljet (Pomena)", lat: 42.7420, lng: 17.3197, day: "Jour 6-7", type: "port", description: "Parc National - Lacs salés" },
+            { name: "Dubrovnik", lat: 42.6414, lng: 18.1086, day: "Jour 7-9", type: "supply", description: "Ravitaillement - Perle de l'Adriatique" },
+            { name: "Šipan (Élaphites)", lat: 42.7167, lng: 17.9833, day: "Jour 9-10", type: "port", description: "Archipel tranquille" },
+            { name: "Vis", lat: 43.0133, lng: 16.1833, day: "Jour 10-11", type: "port", description: "Grotte Bleue - Biševo" },
+            { name: "Comisa (Vis)", lat: 43.0408, lng: 16.0881, day: "Jour 11-12", type: "supply", description: "Dernier ravitaillement - Port de pêche" },
+            { name: "Bol (Brač)", lat: 43.2639, lng: 16.6556, day: "Jour 12-13", type: "port", description: "Zlatni Rat - Plage célèbre" },
+            { name: "Milna (Brač)", lat: 43.3267, lng: 16.4533, day: "Jour 13-14", type: "port", description: "Port naturel protégé" },
+            { name: "Trogir", lat: 43.5147, lng: 16.2520, day: "Jour 14", type: "end", description: "Retour 18h00 - Fin de croisière" }
+        ];
+
+        // Ajouter les marqueurs avec des couleurs selon le type
+        const getMarkerColor = (type) => {
+            switch (type) {
+                case 'start': return '#27ae60';
+                case 'supply': return '#e74c3c';
+                case 'end': return '#f39c12';
+                default: return '#3498db';
+            }
+        };
+
+        const getMarkerIcon = (type, color) => {
+            const icon = type === 'start' ? '🚢' :
+                type === 'end' ? '🏁' :
+                    type === 'supply' ? '⛽' : '⚓';
+
+            return L.divIcon({
+                className: 'custom-div-icon',
+                html: `<div style="background-color: ${color}; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid white; box-shadow: 0 3px 10px rgba(0,0,0,0.3); font-size: 14px;">${icon}</div>`,
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            });
+        };
+
+        waypoints.forEach((point, index) => {
+            const color = getMarkerColor(point.type);
+            const marker = L.marker([point.lat, point.lng], {
+                icon: getMarkerIcon(point.type, color)
+            }).addTo(map);
+
+            const popupContent = `
+                <div class="popup-content">
+                    <h4>${point.name}</h4>
+                    <p><span class="day">${point.day}</span></p>
+                    <p>${point.description}</p>
+                    <p><strong>Coordonnées:</strong> ${point.lat.toFixed(4)}°N, ${Math.abs(point.lng).toFixed(4)}°E</p>
+                </div>
+            `;
+            marker.bindPopup(popupContent);
+        });
+
+        // Créer la route avec des lignes entre les points
+        const routeCoords = waypoints.map(point => [point.lat, point.lng]);
+
+        // Ligne principale de la route
+        const routeLine = L.polyline(routeCoords, {
+            color: '#2980b9',
+            weight: 4,
+            opacity: 0.8,
+            dashArray: '10, 10',
+            className: 'route-line'
+        }).addTo(map);
+
+        // Ligne de retour de Dubrovnik vers Trogir (différente couleur)
+        const returnStart = 7; // Index de Dubrovnik
+        const returnCoords = routeCoords.slice(returnStart);
+
+        L.polyline(returnCoords, {
+            color: '#e74c3c',
+            weight: 3,
+            opacity: 0.6,
+            dashArray: '5, 10'
+        }).addTo(map);
+
+        // Ajuster la vue pour inclure tous les points
+        const group = new L.featureGroup(waypoints.map(point =>
+            L.marker([point.lat, point.lng])
+        ));
+        map.fitBounds(group.getBounds().pad(0.1));
+
+        // Ajouter une échelle
+        L.control.scale({
+            metric: true,
+            imperial: false,
+            position: 'bottomright'
+        }).addTo(map);
+
+        // Animation des marqueurs
+        setTimeout(() => {
+            const markers = document.querySelectorAll('.custom-div-icon div');
+            markers.forEach((marker, index) => {
+                setTimeout(() => {
+                    marker.style.animation = 'bounce 1s ease-in-out';
+                }, index * 200);
+            });
+        }, 1000);
+
+        // CSS pour l'animation bounce
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes bounce {
+                0%, 20%, 60%, 100% { transform: translateY(0); }
+                40% { transform: translateY(-10px); }
+                80% { transform: translateY(-5px); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+
+</html>
