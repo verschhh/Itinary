@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Itinéraire de Navigation en Croatie</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+
+        .info {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Itinéraire de Navigation en Croatie</h1>
+    <div id="map"></div>
+    <div id="info"></div>
+    <h2>Tableau Récapitulatif</h2>
+    <table>
+        <tr>
+            <th>N°</th>
+            <th>Date</th>
+            <th>Destination</th>
+            <th>Distance (milles nautiques)</th>
+            <th>Temps de Trajet (heures)</th>
+            <th>Choses à Faire</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>2/08</td>
+            <td>Trogir</td>
+            <td>0</td>
+            <td>0</td>
+            <td>Explorer la vieille ville classée à l'UNESCO.</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>3/08</td>
+            <td>Primosten</td>
+            <td>15</td>
+            <td>2.5</td>
+            <td>Visiter le village de pêcheurs, se détendre sur les plages de galets.</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>4/08</td>
+            <td>Skradin</td>
+            <td>20</td>
+            <td>3</td>
+            <td>Explorer le parc national de Krka et ses cascades.</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>5/08</td>
+            <td>Zut</td>
+            <td>25</td>
+            <td>4</td>
+            <td>Profiter de la tranquillité de l'île et se baigner.</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>6/08</td>
+            <td>Kornati</td>
+            <td>15</td>
+            <td>2.5</td>
+            <td>Découvrir les paysages lunaires et les eaux cristallines du parc national des Kornati.</td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>7/08</td>
+            <td>Telascica</td>
+            <td>10</td>
+            <td>1.5</td>
+            <td>Visiter le parc naturel et admirer les falaises spectaculaires.</td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td>8/08</td>
+            <td>Kaprije</td>
+            <td>20</td>
+            <td>3</td>
+            <td>Se détendre sur cette île sans voitures et explorer ses sentiers.</td>
+        </tr>
+        <tr>
+            <td>8</td>
+            <td>9/08</td>
+            <td>Solta</td>
+            <td>15</td>
+            <td>2.5</td>
+            <td>Visiter les oliveraies et les villages pittoresques de l'île.</td>
+        </tr>
+        <tr>
+            <td>9</td>
+            <td>10/08</td>
+            <td>Bol</td>
+            <td>15</td>
+            <td>2.5</td>
+            <td>Profiter de la plage de Zlatni Rat et explorer la ville de Bol.</td>
+        </tr>
+        <tr>
+            <td>10</td>
+            <td>11/08</td>
+            <td>Hvar</td>
+            <td>20</td>
+            <td>3</td>
+            <td>Découvrir la vieille ville historique et profiter de la vie nocturne animée.</td>
+        </tr>
+        <tr>
+            <td>11</td>
+            <td>12/08</td>
+            <td>Korcula</td>
+            <td>25</td>
+            <td>4</td>
+            <td>Explorer la vieille ville fortifiée et visiter les vignobles renommés.</td>
+        </tr>
+        <tr>
+            <td>12</td>
+            <td>13/08</td>
+            <td>Pomena</td>
+            <td>15</td>
+            <td>2.5</td>
+            <td>Visiter le parc national de Mljet et ses lacs salés.</td>
+        </tr>
+        <tr>
+            <td>13</td>
+            <td>14/08</td>
+            <td>Dubrovnik</td>
+            <td>20</td>
+            <td>3</td>
+            <td>Explorer la ville historique classée à l'UNESCO et ses remparts.</td>
+        </tr>
+        <tr>
+            <td>14</td>
+            <td>15/08</td>
+            <td>Trogir</td>
+            <td>90</td>
+            <td>15</td>
+            <td>Retour à Trogir, fin de la croisière.</td>
+        </tr>
+    </table>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([43.5081, 16.4402], 7);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        var points = [
+            { lat: 43.5153, lng: 16.2514, name: 'Trogir', info: 'Trogir est une ville historique avec une belle vieille ville classée à l\'UNESCO. C\'est un excellent point de départ pour votre croisière.' },
+            { lat: 43.5900, lng: 15.9200, name: 'Primosten', info: 'Primosten est un village de pêcheurs pittoresque avec des plages de galets et une vieille ville charmante.' },
+            { lat: 43.8167, lng: 15.9333, name: 'Skradin', info: 'Skradin est la porte d\'entrée du parc national de Krka, connu pour ses cascades et ses paysages naturels.' },
+            { lat: 43.8000, lng: 15.3000, name: 'Zut', info: 'Zut est une petite île paisible, idéale pour la détente et la baignade.' },
+            { lat: 43.8333, lng: 15.2000, name: 'Kornati', info: 'Le parc national des Kornati est un archipel de 89 îles, connu pour ses paysages lunaires et ses eaux cristallines.' },
+            { lat: 43.8500, lng: 15.1500, name: 'Telascica', info: 'Telascica est un parc naturel avec une baie profonde et des falaises spectaculaires.' },
+            { lat: 43.6667, lng: 15.7500, name: 'Kaprije', info: 'Kaprije est une petite île sans voitures, parfaite pour une escapade tranquille.' },
+            { lat: 43.3833, lng: 16.3000, name: 'Solta', info: 'Solta est une île verdoyante avec des oliveraies et des villages pittoresques.' },
+            { lat: 43.2667, lng: 16.6667, name: 'Bol', info: 'Bol est célèbre pour sa plage de Zlatni Rat, une langue de sable qui s\'avance dans la mer.' },
+            { lat: 43.1667, lng: 16.4333, name: 'Hvar', info: 'Hvar est une île glamour avec une vieille ville historique, des plages et une vie nocturne animée.' },
+            { lat: 42.9667, lng: 17.1333, name: 'Korcula', info: 'Korcula est une île médiévale avec une vieille ville fortifiée et des vignobles renommés.' },
+            { lat: 42.7667, lng: 17.3667, name: 'Pomena', info: 'Pomena est un petit village sur l\'île de Mljet, connu pour son parc national et ses lacs salés.' },
+            { lat: 42.6500, lng: 18.0833, name: 'Dubrovnik', info: 'Dubrovnik est une ville historique classée à l\'UNESCO, connue pour ses remparts et son architecture médiévale.' },
+            { lat: 43.5153, lng: 16.2514, name: 'Trogir', info: 'Retour à Trogir, fin de la croisière.' }
+        ];
+
+        var polylinePoints = points.map(function (point) {
+            return [point.lat, point.lng];
+        });
+
+        L.polyline(polylinePoints, { color: 'blue' }).addTo(map);
+
+        points.forEach(function (point) {
+            var marker = L.marker([point.lat, point.lng]).addTo(map)
+                .bindPopup(point.name)
+                .openPopup();
+            marker.on('click', function () {
+                document.getElementById('info').innerHTML = '<div class="info"><h2>' + point.name + '</h2><p>' + point.info + '</p></div>';
+            });
+        });
+    </script>
+</body>
+
+</html>
